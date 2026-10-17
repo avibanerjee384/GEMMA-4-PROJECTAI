@@ -1,0 +1,2 @@
+snapshot used: /kaggle/input/competitions/gemma-4-developer-agent/snapshots/requests_7205.tgz
+new file created by the patch (no original): repro_netrc.py

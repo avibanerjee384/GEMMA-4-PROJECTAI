@@ -1,0 +1,117 @@
+diff --git a/fastapi/applications.py b/fastapi/applications.py
+index ed05a1ff..2b5068de 100644
+--- a/fastapi/applications.py
++++ b/fastapi/applications.py
+@@ -679,7 +679,7 @@ class FastAPI(Starlette):
+                 ```
+                 """
+             ),
+-        ] = True,
++        ] = False,
+         responses: Annotated[
+             dict[int | str, dict[str, Any]] | None,
+             Doc(
+diff --git a/fastapi/openapi/docs.py b/fastapi/openapi/docs.py
+index b845f87c..2ef6885b 100644
+--- a/fastapi/openapi/docs.py
++++ b/fastapi/openapi/docs.py
+@@ -1,3 +1,4 @@
++import html as html_module
+ import json
+ from typing import Annotated, Any
+ 
+@@ -140,25 +141,25 @@ def get_swagger_ui_html(
+     <html>
+     <head>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-    <link type="text/css" rel="stylesheet" href="{swagger_css_url}">
+-    <link rel="shortcut icon" href="{swagger_favicon_url}">
+-    <title>{title}</title>
++    <link type="text/css" rel="stylesheet" href="{html_module.escape(swagger_css_url)}">
++    <link rel="shortcut icon" href="{html_module.escape(swagger_favicon_url)}">
++    <title>{html_module.escape(title)}</title>
+     </head>
+     <body>
+     <div id="swagger-ui">
+     </div>
+-    <script src="{swagger_js_url}"></script>
++    <script src="{html_module.escape(swagger_js_url)}"></script>
+     <!-- `SwaggerUIBundle` is now available on the page -->
+     <script>
+     const ui = SwaggerUIBundle({{
+-        url: '{openapi_url}',
++        url: {json.dumps(openapi_url)},
+     """
+ 
+     for key, value in current_swagger_ui_parameters.items():
+         html += f"{json.dumps(key)}: {json.dumps(jsonable_encoder(value))},\n"
+ 
+     if oauth2_redirect_url:
+-        html += f"oauth2RedirectUrl: window.location.origin + '{oauth2_redirect_url}',"
++        html += f"oauth2RedirectUrl: window.location.origin + {json.dumps(oauth2_redirect_url)},"
+ 
+     html += """
+     presets: [
+diff --git a/verify_fix.py b/verify_fix.py
+new file mode 100644
+index 00000000..5746d037
+--- /dev/null
++++ b/verify_fix.py
+@@ -0,0 +1,57 @@
++from fastapi import FastAPI
++from fastapi.openapi.docs import get_swagger_ui_html
++from fastapi.responses import HTMLResponse
++import json
++
++def test_root_path_in_servers_default():
++    app = FastAPI()
++    # The default should now be False
++    assert app.root_path_in_servers is False
++    print("test_root_path_in_servers_default passed")
++
++def test_swagger_ui_escaping():
++    # Test with potentially dangerous values
++    title = "</title><script>alert('xss')</script>"
++    openapi_url = "'; alert('xss'); //"
++    swagger_css_url = "\"><script>alert('xss')</script>"
++    swagger_favicon_url = "\"><script>alert('xss')</script>"
++    swagger_js_url = "\"><script>alert('xss')</script>"
++    oauth2_redirect_url = "'; alert('xss'); //"
++    
++    response = get_swagger_ui_html(
++        title=title,
++        openapi_url=openapi_url,
++        swagger_css_url=swagger_css_url,
++        swagger_favicon_url=swagger_favicon_url,
++        swagger_js_url=swagger_js_url,
++        oauth2_redirect_url=oauth2_redirect_url
++    )
++    
++    content = response.body.decode()
++    
++    # Check title escaping
++    assert "</title>" not in content.split("<title>")[1].split("</title>")[0]
++    
++    # Check openapi_url escaping (should be json encoded)
++    # It should look like url: "'; alert('xss'); //",
++    assert f'url: {json.dumps(openapi_url)},' in content
++    
++    # Check oauth2_redirect_url escaping
++    assert f'oauth2RedirectUrl: window.location.origin + {json.dumps(oauth2_redirect_url)},' in content
++    
++    # Check URL escaping in HTML attributes
++    assert f'href="{html.escape(swagger_css_url)}"' in content
++    assert f'href="{html.escape(swagger_favicon_url)}"' in content
++    assert f'src="{html.escape(swagger_js_url)}"' in content
++    
++    print("test_swagger_ui_escaping passed")
++
++import html
++if __name__ == "__main__":
++    try:
++        test_root_path_in_servers_default()
++        test_swagger_ui_escaping()
++        print("All tests passed!")
++    except Exception as e:
++        print(f"Test failed: {e}")
++        raise e

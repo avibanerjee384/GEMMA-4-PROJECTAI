@@ -1,0 +1,28 @@
+diff --git a/repro.py b/repro.py
+new file mode 100644
+index 00000000..0eb9fc65
+--- /dev/null
++++ b/repro.py
+@@ -0,0 +1,22 @@
++from fastapi import FastAPI
++from fastapi.testclient import TestClient
++from collections.abc import AsyncIterable
++
++app = FastAPI()
++
++@app.get("/stream")
++async def stream() -> AsyncIterable[str]:
++    yield "hello"
++    yield " world"
++
++client = TestClient(app)
++
++def test_stream():
++    response = client.get("/stream")
++    print(f"Status code: {response.status_code}")
++    print(f"Content: {response.content}")
++    assert response.status_code == 200
++    assert response.content == b"hello world"
++
++if __name__ == "__main__":
++    test_stream()

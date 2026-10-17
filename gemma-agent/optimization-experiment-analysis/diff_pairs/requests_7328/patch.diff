@@ -1,0 +1,77 @@
+diff --git a/reproduce_issue.py b/reproduce_issue.py
+new file mode 100644
+index 00000000..c71d5f69
+--- /dev/null
++++ b/reproduce_issue.py
+@@ -0,0 +1,59 @@
++
++import requests
++from requests.models import Response, PreparedRequest
++from requests.sessions import Session
++from unittest.mock import MagicMock
++
++def test_redirect_history_self_reference():
++    session = Session()
++    
++    # Mock adapter to simulate redirects
++    mock_adapter = MagicMock()
++    
++    # R1: Redirects to R2
++    r1 = Response()
++    r1.status_code = 302
++    r1.headers = {'location': 'http://example.com/2'}
++    r1.url = 'http://example.com/1'
++    
++    # R2: Redirects to R3
++    r2 = Response()
++    r2.status_code = 302
++    r2.headers = {'location': 'http://example.com/3'}
++    r2.url = 'http://example.com/2'
++    
++    # R3: Final response
++    r3 = Response()
++    r3.status_code = 200
++    r3.url = 'http://example.com/3'
++    
++    # Mock adapter.send to return R1, then R2, then R3
++    mock_adapter.send.side_effect = [r1, r2, r3]
++    session.adapter = mock_adapter # This is not quite how it works, but let's see
++    
++    # We need to override get_adapter
++    session.get_adapter = MagicMock(return_value=mock_adapter)
++    
++    # Use session to prepare the request
++    req = session.prepare_request(requests.Request('GET', 'http://example.com/1'))
++    
++    resp = session.send(req, allow_redirects=True)
++    
++    print(f"Final response URL: {resp.url}")
++    print(f"History length: {len(resp.history)}")
++    
++    for i, h in enumerate(resp.history):
++        print(f"History[{i}] URL: {h.url}, History length: {len(h.history)}")
++        # Check for self-reference
++        assert h not in h.history, f"Response {h.url} is in its own history!"
++
++if __name__ == "__main__":
++    try:
++        test_redirect_history_self_reference()
++        print("Test passed!")
++    except AssertionError as e:
++        print(f"Test failed: {e}")
++    except Exception as e:
++        print(f"An error occurred: {e}")
++        import traceback
++        traceback.print_exc()
+diff --git a/src/requests/sessions.py b/src/requests/sessions.py
+index 578cc44d..d11d6fe8 100644
+--- a/src/requests/sessions.py
++++ b/src/requests/sessions.py
+@@ -181,7 +181,6 @@ class SessionRedirectMixin:
+             # Update history and keep track of redirects.
+             # resp.history must ignore the original request in this loop
+             hist.append(resp)
+-            resp.history = hist[1:]
+ 
+             try:
+                 resp.content  # Consume socket so it can be released
