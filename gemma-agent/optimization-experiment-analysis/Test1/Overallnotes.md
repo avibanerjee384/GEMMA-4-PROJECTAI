@@ -1,7 +1,7 @@
 ## Analysis
 - fastapi_14962: 310.9 runtime (cap) | 25 tool calls | unresolved | Cut off by time most likely but don't increase time per task (prompt change to edit earlier)
 - fastapi_14964: 136.9 runtime | 8 tool calls | unresolved | patch quality issue (more thinking power, prompt change to reiterate over patch to test a few times or until good)
-- fastapi_14978: 
+- fastapi_14978: 310.7 runtime (cap) | 26 tool calls | 
 - fastapi_14986:
 - fastapi_15023:
 - fastapi_15030:
