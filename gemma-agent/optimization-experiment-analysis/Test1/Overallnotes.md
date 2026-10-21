@@ -1,8 +1,8 @@
 ## Analysis
 - fastapi_14962: 310.9 runtime (cap) | 25 tool calls | unresolved | Cut off by time most likely but don't increase time per task (prompt change to edit earlier)
 - fastapi_14964: 136.9 runtime | 8 tool calls | unresolved | patch quality issue (more thinking power, prompt change to reiterate over patch to test a few times or until good)
-- fastapi_14978: 310.7 runtime (cap) | 26 tool calls | 
-- fastapi_14986:
+- fastapi_14978: 310.7 runtime (cap) | 26 tool calls | unresolved | Broken due to a strange redundancy in the code where three of the same patch change were applied to routing.py. Also the debug prints are left in the diff code. (This does show testing though and should be probably fine.
+- fastapi_14986: 260.6 runtime | 21 tool calls | unresolved | 
 - fastapi_15023:
 - fastapi_15030:
 - fastapi_15280:
@@ -21,5 +21,12 @@
 - rich_4077:
 
 ### Conclusion from test: 
-- Test a time increase and log but don't analyze
-- Token limit completely fine, can lower if nesscesary
+- ~~Test a time increase and log but don't analyze~~
+- Token limit completely fine, can lower if nesscesary (actually probably should since maximum num of tokens ever used is about 1500 but should test more)
+- Create a rule for early submission of patch and ensure submission always (maybe around call 16)
+- Add prompt changes
+- **DO NOT INCREASE RUNTIME**
+- Optimize model to create patch faster (extra thinking time often unnescesary)
+- Test for whether or not the model is patching in the right place
+- Check that all changes store to the submission
+- Add a prompt rule to ensure that there is only one instance of a helper in a submission ("Use one helper")
