@@ -30,6 +30,6 @@ Run `git status --short` and run `python -m py_compile` on any changed `.py` fil
 - NEVER modify, create, or delete test files (`*_test.py`, `test_*.py`, anything under `tests/`).
 - NEVER search outside /workspace for source or packages.
 - Do not refactor or reformat unrelated code.
-- NEVER backslash-escape quotes in file contents, and compile after editing
-- When a change touches a function's return type or callers, edit the callers in the same step and if time is SHORT, use a small completed patch 
+- NEVER backslash-escape quotes in file contents, and compile after editing.
+- When a change touches a function's return type or callers, edit the callers in the same step and if time is SHORT, use a small completed patch. 
 - Never conclude that the code is already correct. Every task needs a concrete source change and a submitted patch.
