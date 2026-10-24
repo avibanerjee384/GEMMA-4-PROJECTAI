@@ -1,0 +1,43 @@
+diff --git a/fastapi/params.py b/fastapi/params.py
+index 68f98708..e5d0d629 100644
+--- a/fastapi/params.py
++++ b/fastapi/params.py
+@@ -476,6 +476,7 @@ class Body(FieldInfo):  # type: ignore[misc]
+         annotation: Any | None = None,
+         embed: bool | None = None,
+         media_type: str = "application/json",
++        strict_content_type: bool = False,
+         alias: str | None = None,
+         alias_priority: int | None = _Unset,
+         validation_alias: str | AliasPath | AliasChoices | None = None,
+diff --git a/fastapi/routing.py b/fastapi/routing.py
+index 528c9629..5fe6c171 100644
+--- a/fastapi/routing.py
++++ b/fastapi/routing.py
+@@ -368,16 +368,26 @@ def get_request_handler(
+                     body_bytes = await request.body()
+                     if body_bytes:
+                         json_body: Any = Undefined
++                        strict_content_type = False
++                        if isinstance(body_field.field_info, params.Body):
++                            strict_content_type = getattr(body_field.field_info, "strict_content_type", False)
+                         content_type_value = request.headers.get("content-type")
+                         if not content_type_value:
++                            if strict_content_type:
++                                raise HTTPException(status_code=415, detail="Unsupported media type")
+                             json_body = await request.json()
+                         else:
+                             message = email.message.Message()
+                             message["content-type"] = content_type_value
++                            print(f"DEBUG: content_type_value={content_type_value}, maintype={message.get_content_maintype()}, subtype={message.get_content_subtype()}, strict={strict_content_type}")
+                             if message.get_content_maintype() == "application":
+                                 subtype = message.get_content_subtype()
+                                 if subtype == "json" or subtype.endswith("+json"):
+                                     json_body = await request.json()
++                                elif strict_content_type:
++                                    raise HTTPException(status_code=415, detail="Unsupported media type")
++                            elif strict_content_type:
++                                raise HTTPException(status_code=415, detail="Unsupported media type")
+                         if json_body != Undefined:
+                             body = json_body
+                         else:
