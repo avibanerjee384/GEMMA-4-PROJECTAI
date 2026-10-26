@@ -1,1 +1,22 @@
-
+| # | id | repo | resolved | patch_chars | tool_calls | duration_s | wall_s | hit_tool_cap | hit_time_cap |
+|---|---|---|---|---|---|---|---|---|---|
+| 0 | fastapi_15661 | fastapi/fastapi | False | 0 | 27 | 308.1 | 308.1 | False | True |
+| 1 | fastapi_15588 | fastapi/fastapi | False | 1076 | 17 | 168.7 | 168.8 | False | False |
+| 2 | fastapi_15589 | fastapi/fastapi | False | 0 | 22 | 307.8 | 307.8 | False | True |
+| 3 | fastapi_15030 | fastapi/fastapi | False | 2704 | 12 | 310.9 | 311.0 | False | True |
+| 4 | fastapi_14962 | fastapi/fastapi | False | 2096 | 29 | 310.3 | 310.4 | False | True |
+| 5 | fastapi_15280 | fastapi/fastapi | False | 0 | 30 | 240.3 | 240.3 | True | False |
+| 6 | fastapi_14964 | fastapi/fastapi | False | 2594 | 26 | 267.3 | 267.4 | False | False |
+| 7 | fastapi_15023 | fastapi/fastapi | False | 4378 | 24 | 300.0 | 300.1 | False | True |
+| 8 | fastapi_14986 | fastapi/fastapi | False | 1896 | 26 | 274.7 | 274.8 | False | False |
+| 9 | fastapi_14978 | fastapi/fastapi | False | 2345 | 30 | 310.7 | 310.8 | True | True |
+| 10 | requests_7505 | psf/requests | False | 2568 | 23 | 328.3 | 328.3 | False | True |
+| 11 | requests_7502 | psf/requests | False | 1715 | 25 | 310.2 | 310.2 | False | True |
+| 12 | requests_7433 | psf/requests | False | 584 | 15 | 224.3 | 224.3 | False | False |
+| 13 | requests_7427 | psf/requests | False | 1067 | 15 | 304.6 | 304.6 | False | True |
+| 14 | requests_7315 | psf/requests | False | 522 | 22 | 204.3 | 204.3 | False | False |
+| 15 | requests_7328 | psf/requests | False | 0 | 11 | 302.2 | 302.2 | False | True |
+| 16 | requests_7309 | psf/requests | False | 692 | 15 | 124.9 | 124.9 | False | False |
+| 17 | requests_7205 | psf/requests | False | 503 | 16 | 167.2 | 167.3 | False | False |
+| 18 | rich_4070 | Textualize/rich | False | 3577 | 30 | 308.6 | 308.6 | True | True |
+| 19 | rich_4077 | Textualize/rich | True | 324 | 23 | 258.4 | 258.5 | False | False |
