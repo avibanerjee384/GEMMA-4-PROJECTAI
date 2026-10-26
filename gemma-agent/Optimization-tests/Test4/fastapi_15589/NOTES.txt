@@ -1,1 +1,0 @@
-Empty patch: the agent produced no diff for this task.
