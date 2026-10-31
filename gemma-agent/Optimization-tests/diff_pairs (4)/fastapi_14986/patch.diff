@@ -1,0 +1,46 @@
+diff --git a/fastapi/applications.py b/fastapi/applications.py
+index ed05a1ff..2b5068de 100644
+--- a/fastapi/applications.py
++++ b/fastapi/applications.py
+@@ -679,7 +679,7 @@ class FastAPI(Starlette):
+                 ```
+                 """
+             ),
+-        ] = True,
++        ] = False,
+         responses: Annotated[
+             dict[int | str, dict[str, Any]] | None,
+             Doc(
+diff --git a/fastapi/openapi/docs.py b/fastapi/openapi/docs.py
+index b845f87c..e52f84a6 100644
+--- a/fastapi/openapi/docs.py
++++ b/fastapi/openapi/docs.py
+@@ -135,6 +135,8 @@ def get_swagger_ui_html(
+     if swagger_ui_parameters:
+         current_swagger_ui_parameters.update(swagger_ui_parameters)
+ 
++    openapi_url_escaped = json.dumps(openapi_url).replace(r"</script>", r"</\script>")
++
+     html = f"""
+     <!DOCTYPE html>
+     <html>
+@@ -151,15 +153,15 @@ def get_swagger_ui_html(
+     <!-- `SwaggerUIBundle` is now available on the page -->
+     <script>
+     const ui = SwaggerUIBundle({{
+-        url: '{openapi_url}',
++        url: {openapi_url_escaped},
+     """
+ 
+     for key, value in current_swagger_ui_parameters.items():
+-        html += f"{json.dumps(key)}: {json.dumps(jsonable_encoder(value))},\n"
++        html += f"{json.dumps(key)}: {json.dumps(jsonable_encoder(value)).replace(r'</script>', r'</\script>')},\n"
+ 
+     if oauth2_redirect_url:
+-        html += f"oauth2RedirectUrl: window.location.origin + '{oauth2_redirect_url}',"
+-
++        oauth2_redirect_url_escaped = json.dumps(oauth2_redirect_url).replace(r"</script>", r"</\script>")
++        html += f"oauth2RedirectUrl: window.location.origin + {oauth2_redirect_url_escaped},"
+     html += """
+     presets: [
+         SwaggerUIBundle.presets.apis,
