@@ -1,0 +1,22 @@
+# Diff / original-file pairs
+
+- fastapi_15661 | resolved=False | hit_time_cap=True | tool_calls=28 | EMPTY PATCH
+- fastapi_15588 | resolved=False | hit_time_cap=False | tool_calls=14 | files: ['fastapi/sse.py']
+- fastapi_15589 | resolved=False | hit_time_cap=True | tool_calls=16 | EMPTY PATCH
+- fastapi_15030 | resolved=False | hit_time_cap=False | tool_calls=18 | files: ['fastapi/responses.py']
+- fastapi_14962 | resolved=False | hit_time_cap=True | tool_calls=25 | EMPTY PATCH
+- fastapi_15280 | resolved=False | hit_time_cap=True | tool_calls=35 | EMPTY PATCH
+- fastapi_14964 | resolved=False | hit_time_cap=False | tool_calls=16 | files: ['fastapi/responses.py']
+- fastapi_15023 | resolved=False | hit_time_cap=True | tool_calls=23 | files: ['docs_src/custom_response/tutorial007_py310.py', 'docs_src/dependencies/tutorial013_an_py310.py', 'docs_src/dependencies/tutorial014_an_py310.py']
+- fastapi_14986 | resolved=False | hit_time_cap=True | tool_calls=22 | files: ['fastapi/applications.py', 'fastapi/openapi/docs.py']
+- fastapi_14978 | resolved=False | hit_time_cap=True | tool_calls=15 | files: ['fastapi/params.py', 'fastapi/routing.py']
+- requests_7505 | resolved=False | hit_time_cap=True | tool_calls=15 | EMPTY PATCH
+- requests_7502 | resolved=False | hit_time_cap=True | tool_calls=24 | EMPTY PATCH
+- requests_7433 | resolved=False | hit_time_cap=False | tool_calls=10 | files: ['src/requests/models.py']
+- requests_7427 | resolved=False | hit_time_cap=True | tool_calls=13 | files: ['src/requests/utils.py']
+- requests_7315 | resolved=False | hit_time_cap=False | tool_calls=20 | files: ['src/requests/adapters.py']
+- requests_7328 | resolved=False | hit_time_cap=True | tool_calls=17 | files: ['src/requests/sessions.py']
+- requests_7309 | resolved=False | hit_time_cap=False | tool_calls=12 | files: ['src/requests/utils.py']
+- requests_7205 | resolved=False | hit_time_cap=True | tool_calls=33 | files: ['src/requests/utils.py']
+- rich_4070 | resolved=False | hit_time_cap=True | tool_calls=9 | files: ['rich/logging.py']
+- rich_4077 | resolved=True | hit_time_cap=True | tool_calls=24 | files: ['rich/file_proxy.py']
