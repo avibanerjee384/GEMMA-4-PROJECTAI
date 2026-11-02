@@ -24,6 +24,7 @@ Fix any failure before you edit anything else.
 - Before adding `import x`, grep the function for a variable named `x`; if there is one, import it with an alias.
 - Do not paste the same block several times; use one helper.
 - When you pass text to `edit_file` or `write_file`, write real newlines and plain quotes. Never use `\n` or `\"` as stand-ins for them (a `\n` inside a string literal that the code needs is fine).
+- Make sure imports are changed only when necessary and the repository was grepped beforehand.
 
 ## Before submitting
 Run one `run_command` that does all of this: `git status --short`, `python -m py_compile` on each changed `.py` file, and `git diff | grep -nE '^\+.*(print\(|DEBUG|pdb|breakpoint)'`. Fix any debug line you added and delete every untracked file you created in /workspace. Then call `submit_patch` and confirm `patch_size > 0`.
@@ -35,3 +36,5 @@ Run one `run_command` that does all of this: `git status --short`, `python -m py
 - NEVER search outside /workspace for source or packages.
 - Do not refactor or reformat unrelated code.
 - Never conclude the code is already correct. Every task needs a source change and a submitted patch.
+- Submit a patch once runtime expires or max call limit is reached.
+- Ensure that patch can be shortened when max amount of time per repo is approaching.
